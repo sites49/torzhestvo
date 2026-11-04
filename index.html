@@ -126,7 +126,7 @@ h2 { font: 500 clamp(44px, 6vw, 92px)/.95 var(--fd); letter-spacing: -.02em; mar
 
 /* цены: разделы в две колонки, цены по правому краю одной колонки */
 .acc { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; align-items: start }
-.acc > div { border-top: 1px solid var(--line) }
+.acc > details:nth-child(-n+2) { border-top: 1px solid var(--line) }
 details { border-bottom: 1px solid var(--line) }
 summary { list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 22px 0; cursor: pointer;
   font: 500 clamp(26px, 2.5vw, 34px)/1.1 var(--fd) }
@@ -219,7 +219,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px }
   .row .no { display: none } .row h3 { font-size: min(7.4vw, 28px); overflow-wrap: anywhere } .row .from { text-align: left } .row:hover h3 { transform: none }
   .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: none; grid-auto-rows: 44vw }
   .mosaic figure:first-child { grid-row: span 1 }
-  .acc { grid-template-columns: 1fr } .acc > div + div { border-top: 0 }
+  .acc { grid-template-columns: 1fr } .acc > details:nth-child(2) { border-top: 0 }
   .steps { grid-template-columns: 1fr }
   .contact .wrap { grid-template-columns: minmax(0, 1fr) } .contact address { font-size: min(10.5vw, 44px) } .contact dl { grid-template-columns: minmax(0, auto) minmax(0, 1fr) }
   .map, .map .leaflet-container { min-height: 320px }
@@ -241,7 +241,7 @@ h2, .row h3, summary, .step h3, .dlg h3, .contact address, .logo { font-weight: 
 .arrows button:hover { border-color: var(--acc); color: var(--acc) }
 .arrows svg, .lb svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.4 }
 .track { display: flex; gap: clamp(10px, 1.2vw, 16px); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
-  padding: 0 max(var(--pad), calc((100vw - 1320px) / 2 + var(--pad))); scroll-padding: 0 max(var(--pad), calc((100vw - 1320px) / 2 + var(--pad))) }
+  padding: 0 clamp(10px, 1.2vw, 16px); scroll-padding: 0 clamp(10px, 1.2vw, 16px) }
 .track::-webkit-scrollbar { display: none }
 .track button { flex: none; height: clamp(360px, 62vh, 640px); aspect-ratio: 2 / 3; border: 0; padding: 0; background: var(--paper); overflow: hidden; scroll-snap-align: start; cursor: zoom-in; border-radius: var(--r) }
 .track img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.2,1) }
