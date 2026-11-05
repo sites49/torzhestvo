@@ -266,6 +266,11 @@ blockquote cite { display: block; margin-top: 16px; font-style: normal; font-siz
   .arrows { display: none } .track button { height: 62vh; max-height: 520px }
   .revs, .quotes { grid-template-columns: 1fr }
 }
+
+.track { --g: clamp(10px, 1.2vw, 16px); gap: var(--g); padding: 0 !important; scroll-padding: 0 !important; box-sizing: border-box;
+  width: calc(min(100%, 1320px) - 2 * var(--pad)); margin-inline: auto; cursor: grab }
+.track > * { flex: 0 0 calc((100% - 2 * var(--g)) / 3) !important; width: auto !important; height: auto !important; max-height: none !important; aspect-ratio: 2 / 3 }
+@media (max-width: 900px) { .track > * { flex-basis: 78% !important } }
 </style>
 </head>
 <body class="quiet">
