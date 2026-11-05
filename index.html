@@ -125,7 +125,7 @@ h2 { font: 500 clamp(44px, 6vw, 92px)/.95 var(--fd); letter-spacing: -.02em; mar
   background: color-mix(in srgb, var(--bg) 70%, transparent); backdrop-filter: blur(8px) }
 
 /* цены: разделы в две колонки, цены по правому краю одной колонки */
-.acc { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; align-items: start }
+.acc { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; align-items: stretch }
 .acc > details:nth-child(-n+2) { border-top: 1px solid var(--line) }
 details { border-bottom: 1px solid var(--line) }
 summary { list-style: none; display: flex; justify-content: space-between; align-items: center; padding: 22px 0; cursor: pointer;
@@ -153,6 +153,7 @@ details[open] summary i { transform: rotate(45deg) }
 /* контакты: крупный адрес слева, карта справа */
 .contact { margin-top: clamp(72px, 9vw, 128px); background: var(--paper); padding: clamp(56px, 7vw, 96px) 0 }
 .contact .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 4vw, 64px); align-items: stretch }
+.track.drag, .track.drag * { cursor: grabbing !important; user-select: none }
 .contact address { font: 500 clamp(44px, 5.6vw, 92px)/.98 var(--fd); font-style: normal; letter-spacing: -.02em }
 .contact dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; margin: 36px 0; font-size: 18px }
 .contact dt { color: var(--muted) }
@@ -227,7 +228,7 @@ footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px }
 }
 
 .hero h1 .big { font-weight: 400; text-transform: none; letter-spacing: -.02em; line-height: .95 }
-.hero h1 .sub { margin-top: .3em }
+.hero h1 .sub { margin-top: .3em; font-weight: 400 }
 h2, .row h3, summary, .step h3, .dlg h3, .contact address, .logo { font-weight: 400 }
 .row .from:empty::before { content: "На примерку"; font-weight: 500 }
 @media (max-width: 900px) {
@@ -430,6 +431,28 @@ document.addEventListener("keydown", e => { if (!lbx.classList.contains("open"))
 let sx = null;
 lbx.addEventListener("touchstart", e => sx = e.touches[0].clientX, { passive: true });
 lbx.addEventListener("touchend", e => { if (sx === null) return; const d = e.changedTouches[0].clientX - sx; if (Math.abs(d) > 50) lbOpen(at + (d < 0 ? 1 : -1)); sx = null });
+
+document.querySelectorAll(".track").forEach(t => {
+  let down = false, moved = false, sx = 0, sl = 0;
+  t.addEventListener("dragstart", e => e.preventDefault());
+  t.addEventListener("pointerdown", e => { if (e.pointerType !== "mouse" || e.button) return; down = true; moved = false; sx = e.clientX; sl = t.scrollLeft });
+  addEventListener("pointermove", e => {
+    if (!down) return;
+    const d = e.clientX - sx;
+    if (!moved && Math.abs(d) < 6) return;
+    moved = true; t.classList.add("drag"); t.style.scrollSnapType = "none"; t.scrollLeft = sl - d;
+  });
+  addEventListener("pointerup", () => {
+    if (!down) return;
+    down = false; t.classList.remove("drag");
+    if (!moved) return;
+    const pad = parseFloat(getComputedStyle(t).paddingLeft), box = t.getBoundingClientRect().left;
+    const near = [...t.children].reduce((a, c) => Math.abs(c.getBoundingClientRect().left - box - pad) < Math.abs(a.getBoundingClientRect().left - box - pad) ? c : a);
+    t.scrollBy({ left: near.getBoundingClientRect().left - box - pad, behavior: "smooth" });
+    setTimeout(() => t.style.scrollSnapType = "", 450);
+  });
+  t.addEventListener("click", e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false } }, true);
+});
 </script>
 <script>
 (function(){try{
